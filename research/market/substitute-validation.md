@@ -158,7 +158,7 @@ Grades, from the [run log](evidence/mr03-modelfit-cli-2026-10-16.md):
 
 ### Initial result (S0)
 
-A completed free Stack Builder test returned an ordered local PDF RAG workflow for Windows, 16 GB RAM and no GPU. It acknowledged memory/latency uncertainty and suggested reproducibility steps. The visible result named Docling, txtai, Chroma, Ollama, Gemma and Open WebUI. This verifies generated workflow advice, not that the combination runs, preserves privacy or produces an executable export. The six visible component steps named no evaluation tool, and txtai and Chroma were both suggested without a stated joint or alternative storage role.
+A completed free Stack Builder test reportedly returned an ordered local PDF RAG workflow for Windows, 16 GB RAM and no GPU. It acknowledged memory/latency uncertainty and suggested reproducibility steps. The visible result named Docling, txtai, Chroma, Ollama, Gemma and Open WebUI. This verifies generated workflow advice, not that the combination runs, preserves privacy or produces an executable export. The six visible component steps named no evaluation tool, and txtai and Chroma were both suggested without a stated joint or alternative storage role.
 
 No raw customer data, benchmark artifact or paid API output was collected.
 
@@ -166,7 +166,9 @@ Open unknowns:
 - whether Flocci offers any save, share or export function in the rendered app;
 - whether ModelFit's web results step offers a per-result share or export (the CLI's share link keeps only RAM);
 - how many free Flocci requests are available per day;
-- whether either tool detects contradictory constraints.
+- whether ModelFit (which has no free-text input) could express S2 at all.
+
+Flocci's handling of contradictory constraints is no longer open: see F-S2-1 and F-S2-2 above.
 
 ## Method and reproducibility
 
@@ -179,7 +181,7 @@ Anonymous public browsing on free tiers, following Protocol v1. Any reader can r
 **Recommendation: narrow, not pivot**, for the local-versus-API decision scenario tested. This is a research recommendation for coordinator and owner review, not an accepted product decision. No product threshold has been set.
 
 What the substitutes already cover, so the MVP should not compete on it:
-- **Explained component lists.** Flocci's AI builder produced coherent, per-component reasoning in S0 and S2 (AI mode).
+- **Explained component lists.** Flocci's AI builder produced coherent, per-component reasoning in S2 (AI mode, captured in F-S2-2), consistent with the reported S0 answer.
 - **Hardware-fit model picks.** ModelFit answered the 16 GB question instantly and reproducibly. llmfit documents the same capability.
 - **Breadth.** Neither tool lacked candidate components.
 
@@ -218,6 +220,7 @@ What would change the recommendation: if Flocci S1 is later run and Flocci compa
 - #40: whether `unknown`/`out of scope` grading matches contract outcome semantics (`pass`, `fail`, `unknown`, `skipped`).
 - #42: what the observed save/share artifacts imply for the build-summary and share requirements.
 - #49 owner: proposed feature-matrix updates for Flocci and ModelFit (`export`, `context`, `api_pricing`), once results exist.
+- MR-02 audit (PR #87, open): it downgrades Flocci `constraints` and `explanation` to `?` because S0 has no replayable capture, and asks #66 for one. S0 still has no capture here. F-S2-2 is a captured, hashed run that bears on constraint handling and explanation, for the #49 owner to weigh.
 
 ## Phase limit and next action
 
