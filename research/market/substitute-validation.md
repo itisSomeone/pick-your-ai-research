@@ -1,6 +1,6 @@
 # MR-03: Test direct stack-builder substitutes
 
-Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S1/S2 pending · Access date: 2026-10-16
+Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run once in fallback mode, AI-mode S2 and S1 pending · Access date: 2026-10-16
 
 Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
 
@@ -86,7 +86,8 @@ Cells are filled only from captured runs. ModelFit was run through its published
 
 | Tool · scenario | P1 | P2 | P3 | P4 | P5 | Run date | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Flocci · S2 | pending | pending | pending | pending | pending | | |
+| Flocci · S2, fallback mode (assistant unavailable) | failed | failed | failed | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
+| Flocci · S2, AI mode | pending | pending | pending | pending | pending | | |
 | Flocci · S1 | pending | pending | pending | pending | pending | | |
 | ModelFit · S1 (CLI 1.5.3) | partial | partial | out of scope | partial | supported (CLI) | 2026-10-16 | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) |
 | llmfit · S1 (optional) | out of scope | out of scope | out of scope | pending | pending | | |
@@ -107,11 +108,23 @@ Collected 2026-10-16 from public pages before any S1/S2 run, to set expectations
 | --- | --- | --- | --- | --- | --- | --- |
 | Flocci Stack Builder takes a free-text goal; no save/share/export or allowance documented in the static page | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Page metadata generated 2026-10-16 | Primary documentation | Low (client-rendered) | Absence in static text is not absence in the app |
 | ModelFit is local-only, has device → setup → results steps, and offers a dataset JSON API and CLI but no documented result permalink | <https://modelfit.io/> and <https://modelfit.io/data/> · ModelFit | 2026-10-16 | Dataset updated 2026-10-13 | Primary documentation | Medium | Steps 2–3 not visible in static text; dataset CC BY 4.0 with attribution |
+| Flocci S2 in fallback mode returned four unranked tool cards with no constraint flags, including a paid trial for a zero-cost request | [run log](evidence/mr03-flocci-runs-2026-10-16.md) · Flocci Technologies | 2026-10-16 | Free tier, anonymous; page said "the assistant is momentarily unavailable" | Observed behaviour | High for the fallback output shown | Screenshot outside repo; AI builder not exercised |
 | ModelFit engine (CLI 1.5.3) recommends Qwen3.5 9B Q8 as "runs comfortably" for a 16 GB CPU-only Windows PC with no speed estimate; share link keeps only RAM | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) · `@wecko-ai/modelfit` 1.5.3 | 2026-10-16 | npm 1.5.3, tarball SHA-256 3d89facb… | Observed behaviour (deterministic CLI) | High for this configuration | Web UI not observed; CC BY 4.0 data not redistributed |
 | llmfit documents JSON output, REST endpoints and local-runtime-only coverage | <https://www.llmfit.org/> · llmfit | 2026-10-16 | No version stated | Primary documentation | Medium | Seed-site operator unconfirmed (see profile); not installed or run |
 | S0: Flocci returned an ordered six-step local PDF RAG workflow with caveats | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Free tier, anonymous | Observed behaviour | Medium for the observed response | Generated advice only; no runtime, privacy or export verified |
 
 ## Findings, counterevidence and unknowns
+
+### Flocci S2, fallback mode
+
+Flocci showed "Showing smart keyword matches — the assistant is momentarily unavailable" and returned four unranked tool cards: Apertus Chat, Kagi Assistant (paid-subscription trial), Haystack and Piper TTS. None of the conflicting constraints was flagged. Two cards contradict the request (paid, and hosted rather than offline), and one is unrelated (text-to-speech). Per-card bookmark and compare icons exist, but no stack-level save or export was visible.
+
+- P1 `failed`: constraints silently ignored, and a paid tool was offered for a zero-cost request.
+- P2 `failed`: no reasoning or uncertainty.
+- P3 `failed`: no local-versus-API comparison or costs.
+- P4/P5 `unknown`: the icons were not exercised.
+
+This grades the fallback path only. The AI builder's S2 behaviour is still untested and needs a rerun when the assistant is available. **Counterexample signal:** a substitute's guidance can silently degrade to keyword matching, with no warning that constraints are no longer considered. Consistent constraint checking is therefore a candidate differentiator, but one fallback run is not a general reliability finding.
 
 ### ModelFit S1 (CLI 1.5.3, two identical runs)
 
@@ -152,7 +165,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 | Criterion | Artifact / evidence | State |
 | --- | --- | --- |
 | Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | ModelFit done (CLI); Flocci not run |
-| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | ModelFit S1 graded; Flocci S2 not run |
+| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | ModelFit S1 graded; Flocci S2 graded in fallback mode only; AI-mode rerun needed |
 | Inspect saved or exported configuration claims | P4/P5 on each tool | ModelFit done (CLI); Flocci not run |
 | Record counterexamples and pivot recommendation | Findings and recommendation sections | Pending results |
 | Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run captures | Pending results |
@@ -169,7 +182,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 
 ## Phase limit and next action
 
-Next action: run S2 then S1 on Flocci Stack Builder under Protocol v1; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
+Next action: rerun S2 on Flocci when the AI assistant is available, then run S1; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
 
 ## CanIRun.ai candidate (2026-10-16)
 
