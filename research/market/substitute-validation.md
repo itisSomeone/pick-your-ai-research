@@ -1,6 +1,6 @@
 # MR-03: Test direct stack-builder substitutes
 
-Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; S1/S2 runs pending · Access date: 2026-10-16
+Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S1/S2 pending · Access date: 2026-10-16
 
 Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
 
@@ -19,7 +19,7 @@ The proposed MVP in [mvp-analysis.md](mvp-analysis.md) is a hybrid bounded workf
 
 ## Protocol v1 (pinned 2026-10-16, before S1/S2 runs)
 
-The scenarios, graded properties and tool selection below were fixed before any S1/S2 result was seen. The pin is effective once this revision is visible on GitHub for review; runs start only after that. They must not be changed after a competitor result is observed. A later revision requires a new protocol version that keeps v1's results.
+The scenarios, graded properties and tool selection below were fixed before any S1/S2 result was seen. The pin is effective once this revision is visible on GitHub for review; runs start only after that. Deviation, recorded openly: the ModelFit S1 CLI run (2026-10-16, about 19:35 UTC) happened after Protocol v1 was committed but before this revision was reviewable on the upstream repository. An earlier protocol revision (fork commit `ffb47d6`, pushed about 19:10 UTC) already fixed the S1 hardware, use, priority, graded properties and ModelFit as second substitute. Later edits changed S1's workload wording and S2 only, and nothing was changed after the ModelFit result was seen. They must not be changed after a competitor result is observed. A later revision requires a new protocol version that keeps v1's results.
 
 ### Scenarios
 
@@ -82,13 +82,13 @@ Record the date and UTC time, URL, access tier and remaining free allowance show
 
 ## Candidate comparison
 
-Results are pending. Cells are filled only from captured runs.
+Cells are filled only from captured runs. ModelFit was run through its published CLI because the research environment could not reach modelfit.io. The CLI documents itself as a faithful port of the site's engine, but the web results page and its share controls remain unobserved.
 
 | Tool · scenario | P1 | P2 | P3 | P4 | P5 | Run date | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Flocci · S2 | pending | pending | pending | pending | pending | | |
 | Flocci · S1 | pending | pending | pending | pending | pending | | |
-| ModelFit · S1 | pending | pending | out of scope | pending | pending | | |
+| ModelFit · S1 (CLI 1.5.3) | partial | partial | out of scope | partial | supported (CLI) | 2026-10-16 | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) |
 | llmfit · S1 (optional) | out of scope | out of scope | out of scope | pending | pending | | |
 
 ## Documented capabilities before the runs (desk evidence)
@@ -107,10 +107,23 @@ Collected 2026-10-16 from public pages before any S1/S2 run, to set expectations
 | --- | --- | --- | --- | --- | --- | --- |
 | Flocci Stack Builder takes a free-text goal; no save/share/export or allowance documented in the static page | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Page metadata generated 2026-10-16 | Primary documentation | Low (client-rendered) | Absence in static text is not absence in the app |
 | ModelFit is local-only, has device → setup → results steps, and offers a dataset JSON API and CLI but no documented result permalink | <https://modelfit.io/> and <https://modelfit.io/data/> · ModelFit | 2026-10-16 | Dataset updated 2026-10-13 | Primary documentation | Medium | Steps 2–3 not visible in static text; dataset CC BY 4.0 with attribution |
+| ModelFit engine (CLI 1.5.3) recommends Qwen3.5 9B Q8 as "runs comfortably" for a 16 GB CPU-only Windows PC with no speed estimate; share link keeps only RAM | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) · `@wecko-ai/modelfit` 1.5.3 | 2026-10-16 | npm 1.5.3, tarball SHA-256 3d89facb… | Observed behaviour (deterministic CLI) | High for this configuration | Web UI not observed; CC BY 4.0 data not redistributed |
 | llmfit documents JSON output, REST endpoints and local-runtime-only coverage | <https://www.llmfit.org/> · llmfit | 2026-10-16 | No version stated | Primary documentation | Medium | Seed-site operator unconfirmed (see profile); not installed or run |
 | S0: Flocci returned an ordered six-step local PDF RAG workflow with caveats | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Free tier, anonymous | Observed behaviour | Medium for the observed response | Generated advice only; no runtime, privacy or export verified |
 
 ## Findings, counterevidence and unknowns
+
+### ModelFit S1 (CLI 1.5.3, two identical runs)
+
+Grades, from the [run log](evidence/mr03-modelfit-cli-2026-10-16.md):
+
+- **P1: partial.** C1 could be entered through overrides, and C6 is implicitly met because only Ollama open models are recommended. C2, C3, C5 and C7 cannot be expressed, so they are out of scope. The S1 workload also had to be entered as "chat", since summarisation isn't an option. C4 (latency) is the reason for `partial`: the engine has no throughput basis for any x86 CPU (`estimatedTokensPerSec: null`), yet it labels the top pick "runs comfortably".
+- **P2: partial.** It gives a fit level, a short reason and a standing "estimates, not measured benchmarks" note. But the top pick is simultaneously fit `Heavy` and `comfortable: true`, and the human-readable output says "runs comfortably" with no speed figure. `comfortable` is derived from the memory-fit verdict alone (`src/best.mjs`), so the wording overstates what was assessed.
+- **P3: out of scope.** Local-only by design ("no API keys").
+- **P4: partial.** `--json` keeps the engine inputs (device, chip, RAM, priority, use case) with the result. The shareable `reportUrl` keeps only `ram=16`.
+- **P5: supported at CLI level.** The output is deterministic (byte-identical across two runs), machine-readable JSON from a pinned package version and hash. Web-UI share and export are unknown.
+
+**Counterexample for the MVP:** ModelFit answers the hardware-fit half of S1 quickly and reproducibly, so a plain "which model fits 16 GB" feature would not differentiate. It does not address context, concurrency, latency, cost or the local-versus-API decision. It also presents a memory-fit verdict in comfort language without a CPU speed basis. A transparent CPU latency estimate is the gap the MVP would have to fill. Whether a 9B Q8 model meets 10-second summaries on a CPU-only laptop is an unmeasured hypothesis, not a finding.
 
 ### Initial result (S0)
 
@@ -118,9 +131,9 @@ A completed free Stack Builder test returned an ordered local PDF RAG workflow f
 
 No raw customer data, benchmark artifact or paid API output was collected.
 
-Open unknowns before S1/S2:
+Open unknowns:
 - whether Flocci offers any save, share or export function in the rendered app;
-- whether ModelFit's results step offers a per-result share or export, and how its device list handles a CPU-only Windows laptop;
+- whether ModelFit's web results step offers a per-result share or export (the CLI's share link keeps only RAM);
 - how many free Flocci requests are available per day;
 - whether either tool detects contradictory constraints.
 
@@ -138,9 +151,9 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 
 | Criterion | Artifact / evidence | State |
 | --- | --- | --- |
-| Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | Protocol pinned; not run |
-| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | Not run |
-| Inspect saved or exported configuration claims | P4/P5 on each tool | Not run |
+| Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | ModelFit done (CLI); Flocci not run |
+| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | ModelFit S1 graded; Flocci S2 not run |
+| Inspect saved or exported configuration claims | P4/P5 on each tool | ModelFit done (CLI); Flocci not run |
 | Record counterexamples and pivot recommendation | Findings and recommendation sections | Pending results |
 | Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run captures | Pending results |
 | Relevant technical owners review handoffs; unresolved decisions are named | #2, #40, #42 owners | Not requested |
@@ -156,7 +169,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 
 ## Phase limit and next action
 
-Next action: run S2 then S1 on Flocci Stack Builder, then S1 on ModelFit, under Protocol v1. Use `Refs #66` until every criterion and handoff is accepted.
+Next action: run S2 then S1 on Flocci Stack Builder under Protocol v1; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
 
 ## CanIRun.ai candidate (2026-10-16)
 
