@@ -1,6 +1,6 @@
 # MR-03: Test direct stack-builder substitutes
 
-Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run in fallback and AI mode; Flocci S1 pending · Access date: 2026-10-16
+Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run in fallback and AI mode; Flocci S1 blocked by free-tier access; recommendation issued for review · Access date: 2026-10-16
 
 Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
 
@@ -94,7 +94,7 @@ Cells are filled only from captured runs. ModelFit was run through its published
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Flocci · S2, fallback mode (assistant unavailable) | failed | failed | out of scope | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
 | Flocci · S2, AI mode | failed | partial | out of scope | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
-| Flocci · S1 | pending | pending | pending | pending | pending | | |
+| Flocci · S1-short | unknown (access) | unknown (access) | unknown (access) | unknown (access) | unknown (access) | 2026-10-16 | [attempt log](evidence/mr03-flocci-runs-2026-10-16.md) |
 | ModelFit · S1 (CLI 1.5.3) | partial | partial | out of scope | partial | supported (CLI) | 2026-10-16 | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) |
 | llmfit · S1 (optional) | out of scope | out of scope | out of scope | pending | pending | | |
 
@@ -176,17 +176,38 @@ Anonymous public browsing on free tiers, following Protocol v1. Any reader can r
 
 ## Recommendation and assumptions
 
-Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the scenario tested, with every conclusion linked to a captured run or labelled a hypothesis. It will not be generalised to all markets.
+**Recommendation: narrow, not pivot**, for the local-versus-API decision scenario tested. This is a research recommendation for coordinator and owner review, not an accepted product decision. No product threshold has been set.
+
+What the substitutes already cover, so the MVP should not compete on it:
+- **Explained component lists.** Flocci's AI builder produced coherent, per-component reasoning in S0 and S2 (AI mode).
+- **Hardware-fit model picks.** ModelFit answered the 16 GB question instantly and reproducibly. llmfit documents the same capability.
+- **Breadth.** Neither tool lacked candidate components.
+
+Gaps observed, which the narrowed MVP should target:
+1. **Explicit feasibility verdicts.** Flocci's AI builder softened an impossible combination (20 users, 128k context, under 2 s on one CPU laptop) into hints, without flagging it or naming which constraint to relax. Its fallback silently dropped constraint handling altogether. *Observed:* F-S2-1, F-S2-2.
+2. **Latency on ordinary hardware.** ModelFit has no throughput basis for any x86 CPU, yet labels its pick "runs comfortably" from memory fit alone. *Observed:* ModelFit S1 run log and source.
+3. **A reusable decision record.** ModelFit's share link keeps only RAM, and Flocci showed no configuration export in the captured runs. *Observed for ModelFit; Flocci partly unknown*, because the card icons were not exercised.
+4. **Local-versus-API cost comparison.** No tested tool produced one. ModelFit is out of scope by design. *Unknown for Flocci*, because S1 was blocked.
+
+The narrowed MVP these results support is a per-constraint feasibility check that states pass, fail or unknown, with explicit uncertainty. It would add dated latency and cost ranges for one local-versus-API decision, and a versioned, shareable record that keeps every input and assumption. This matches the hybrid bounded workflow in [mvp-analysis.md](mvp-analysis.md) and drops "guided recommendations" or "hardware fit" as standalone differentiators.
+
+Assumptions and limits:
+- Each Flocci result is a single, nondeterministic run, and the AI-mode capture lacks the page header and summary.
+- ModelFit's web UI was not observed; the CLI documents itself as a port of the site's engine.
+- The infeasibility judgements are analyst reasoning, not measurements.
+- This is an expert evaluation, not evidence of user demand (#63/#52).
+
+What would change the recommendation: if Flocci S1 is later run and Flocci compares local and API options with dated costs and gives a shareable configuration that keeps the inputs, gaps 3–4 weaken. The recommendation would then move toward **pivot or partner** for this scenario. A Flocci S1 rerun from the tester's normal connection is therefore the most valuable follow-up, but it is not required to review this result.
 
 ## Acceptance criteria and validation results
 
 | Criterion | Artifact / evidence | State |
 | --- | --- | --- |
-| Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | ModelFit done (CLI); Flocci not run |
+| Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | Done on ModelFit (CLI); Flocci S1 blocked by free-tier access, and S0 remains the recorded Flocci common scenario |
 | Check constraint handling and explanation quality | P1/P2, S2 on Flocci | Flocci S2 graded (fallback and AI mode); ModelFit S1 graded |
-| Inspect saved or exported configuration claims | P4/P5 on each tool | ModelFit done (CLI); Flocci not run |
-| Record counterexamples and pivot recommendation | Findings and recommendation sections | Pending results |
-| Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run captures | Pending results |
+| Inspect saved or exported configuration claims | P4/P5 on each tool | ModelFit done (CLI); Flocci: no export visible, card icons not exercised |
+| Record counterexamples and pivot recommendation | Findings and recommendation sections | Done: narrow recommendation with counterexamples, pending review |
+| Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run logs | Done: each gap cites a run log, or is marked unknown or analyst judgement |
 | Relevant technical owners review handoffs; unresolved decisions are named | #2, #40, #42 owners | Not requested |
 | Repository checks pass; reviewer accepts the evidence before Done | Validation commands in the PR | Checks run per revision; acceptance pending |
 
@@ -200,7 +221,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 
 ## Phase limit and next action
 
-Next action: run S1 on Flocci and capture the full page, including the header and any configuration or share output; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
+Next action: coordinator and owner review of the recommendation. Optional follow-up: rerun Flocci S1-short from the tester's normal connection, capturing the full page and the bookmark/compare icon behaviour; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
 
 ## CanIRun.ai candidate (2026-10-16)
 
