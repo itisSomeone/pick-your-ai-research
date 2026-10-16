@@ -1,6 +1,6 @@
 # MR-03: Test direct stack-builder substitutes
 
-Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run once in fallback mode, AI-mode S2 and S1 pending · Access date: 2026-10-16
+Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run in fallback and AI mode; Flocci S1 pending · Access date: 2026-10-16
 
 Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
 
@@ -33,6 +33,12 @@ The scenarios, graded properties and tool selection below were fixed before any 
   > A company wants an assistant that summarises public product reviews and forum posts. It must run fully offline on one Windows laptop with 16 GB RAM and no discrete GPU, serve 20 concurrent users, accept a 128,000-token context per request, answer in under 2 seconds, and cost nothing. Recommend a stack, explain your reasoning, and give a configuration we can save or share.
 
   S2 is self-contained, so it can run before S1 in a fresh session. Expected good behaviour is to identify that the constraints cannot all be met together, explain why, and propose which constraint to relax. Silently dropping a constraint is a failure of P1.
+
+**S1-short (interface adaptation for Flocci).** Flocci Stack Builder accepts 2–400 characters ("Ask in 2–400 characters"), and S1 is 498 characters. The following 347-character version keeps every constraint C1–C7 and every requested output. Only wording is compressed ("200 short public product reviews and forum posts" becomes "~200 public reviews/forum posts", and "during working hours" is dropped):
+
+  > Team of 5 summarises ~200 public reviews/forum posts a day. Hardware: Windows laptop, 16 GB RAM, no GPU. ~4,000 tokens per request, up to 3 concurrent users, max USD 50/month, open-weight models preferred, answer in max 10 s. Run locally or use a hosted API? List components, explain why, say what is uncertain, give a config we can save or share.
+
+S2 (374 characters) fit unchanged.
 
 Where a tool's interface cannot take free text, enter the closest structured equivalent and record every field value and unavoidable difference. A constraint the interface cannot express (for example budget or latency in a hardware-fit form) is graded `out of scope` for P1, listed by name, and never counted as respected.
 
@@ -86,8 +92,8 @@ Cells are filled only from captured runs. ModelFit was run through its published
 
 | Tool · scenario | P1 | P2 | P3 | P4 | P5 | Run date | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Flocci · S2, fallback mode (assistant unavailable) | failed | failed | failed | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
-| Flocci · S2, AI mode | pending | pending | pending | pending | pending | | |
+| Flocci · S2, fallback mode (assistant unavailable) | failed | failed | out of scope | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
+| Flocci · S2, AI mode | failed | partial | out of scope | unknown | unknown | 2026-10-16 | [run log](evidence/mr03-flocci-runs-2026-10-16.md) |
 | Flocci · S1 | pending | pending | pending | pending | pending | | |
 | ModelFit · S1 (CLI 1.5.3) | partial | partial | out of scope | partial | supported (CLI) | 2026-10-16 | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) |
 | llmfit · S1 (optional) | out of scope | out of scope | out of scope | pending | pending | | |
@@ -109,6 +115,7 @@ Collected 2026-10-16 from public pages before any S1/S2 run, to set expectations
 | Flocci Stack Builder takes a free-text goal; no save/share/export or allowance documented in the static page | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Page metadata generated 2026-10-16 | Primary documentation | Low (client-rendered) | Absence in static text is not absence in the app |
 | ModelFit is local-only, has device → setup → results steps, and offers a dataset JSON API and CLI but no documented result permalink | <https://modelfit.io/> and <https://modelfit.io/data/> · ModelFit | 2026-10-16 | Dataset updated 2026-10-13 | Primary documentation | Medium | Steps 2–3 not visible in static text; dataset CC BY 4.0 with attribution |
 | Flocci S2 in fallback mode returned four unranked tool cards with no constraint flags, including a paid trial for a zero-cost request | [run log](evidence/mr03-flocci-runs-2026-10-16.md) · Flocci Technologies | 2026-10-16 | Free tier, anonymous; page said "the assistant is momentarily unavailable" | Observed behaviour | High for the fallback output shown | Screenshot outside repo; AI builder not exercised |
+| Flocci S2 in AI mode returned six explained offline components and accepted ~20 users on one CPU laptop without flagging the 128k-context / under-2-s conflict | [run log](evidence/mr03-flocci-runs-2026-10-16.md) · Flocci Technologies | 2026-10-16 | Free tier, anonymous | Observed behaviour | Medium (cards only; header and summary not captured) | Screenshot outside repo; infeasibility is analyst judgement |
 | ModelFit engine (CLI 1.5.3) recommends Qwen3.5 9B Q8 as "runs comfortably" for a 16 GB CPU-only Windows PC with no speed estimate; share link keeps only RAM | [run log](evidence/mr03-modelfit-cli-2026-10-16.md) · `@wecko-ai/modelfit` 1.5.3 | 2026-10-16 | npm 1.5.3, tarball SHA-256 3d89facb… | Observed behaviour (deterministic CLI) | High for this configuration | Web UI not observed; CC BY 4.0 data not redistributed |
 | llmfit documents JSON output, REST endpoints and local-runtime-only coverage | <https://www.llmfit.org/> · llmfit | 2026-10-16 | No version stated | Primary documentation | Medium | Seed-site operator unconfirmed (see profile); not installed or run |
 | S0: Flocci returned an ordered six-step local PDF RAG workflow with caveats | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Free tier, anonymous | Observed behaviour | Medium for the observed response | Generated advice only; no runtime, privacy or export verified |
@@ -121,10 +128,21 @@ Flocci showed "Showing smart keyword matches — the assistant is momentarily un
 
 - P1 `failed`: constraints silently ignored, and a paid tool was offered for a zero-cost request.
 - P2 `failed`: no reasoning or uncertainty.
-- P3 `failed`: no local-versus-API comparison or costs.
+- P3 `out of scope`: S2 requires offline operation and does not ask for a local-versus-API decision.
 - P4/P5 `unknown`: the icons were not exercised.
 
 This grades the fallback path only. The AI builder's S2 behaviour is still untested and needs a rerun when the assistant is available. **Counterexample signal:** a substitute's guidance can silently degrade to keyword matching, with no warning that constraints are no longer considered. Consistent constraint checking is therefore a candidate differentiator, but one fallback run is not a general reliability finding.
+
+### Flocci S2, AI mode
+
+The AI builder returned six tailored cards: llama.cpp, Ollama, Open WebUI, Phi, Gemma and Mistral. Each has a request-specific "WHY".
+
+- **P1 `failed`.** C1 (offline, one CPU laptop) and C5 (zero cost) are respected explicitly. But C3 is treated as feasible ("giving your ~20 users a shared UI") with no warning. C2 (128k context) and C4 (under 2 s) are only hinted at through "realistic quality/latency compromise" and "if you can accept a smaller context and slower per-request latency". The tool never says the combined request cannot be met, or which constraint to relax.
+- **P2 `partial`.** The per-component reasoning is coherent and specific, but there is no stack-level explanation, no numbers and no explicit uncertainty.
+- **P3 `out of scope`.** S2 is offline-only.
+- **P4/P5 `unknown`.** The prompt asked for a shareable configuration. None is visible in the captured area, and the page header, the summary and the card icons were not captured or exercised.
+
+**Counterexample signal.** In AI mode Flocci produces a plausible, well-explained offline component list, comparable to what the MVP's explanation layer would offer. That makes "explained recommendations" a weak differentiator on its own. The gap observed is feasibility checking: an impossible combination of users, context and latency is softened into hints instead of being flagged. An explicit, per-constraint feasibility verdict is the candidate differentiator, pending S1 and owner review.
 
 ### ModelFit S1 (CLI 1.5.3, two identical runs)
 
@@ -165,7 +183,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 | Criterion | Artifact / evidence | State |
 | --- | --- | --- |
 | Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | ModelFit done (CLI); Flocci not run |
-| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | ModelFit S1 graded; Flocci S2 graded in fallback mode only; AI-mode rerun needed |
+| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | Flocci S2 graded (fallback and AI mode); ModelFit S1 graded |
 | Inspect saved or exported configuration claims | P4/P5 on each tool | ModelFit done (CLI); Flocci not run |
 | Record counterexamples and pivot recommendation | Findings and recommendation sections | Pending results |
 | Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run captures | Pending results |
@@ -182,7 +200,7 @@ Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the 
 
 ## Phase limit and next action
 
-Next action: rerun S2 on Flocci when the AI assistant is available, then run S1; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
+Next action: run S1 on Flocci and capture the full page, including the header and any configuration or share output; optionally observe the ModelFit web results page for share/export. Use `Refs #66` until every criterion and handoff is accepted.
 
 ## CanIRun.ai candidate (2026-10-16)
 

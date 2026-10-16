@@ -27,3 +27,35 @@ Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) ·
 ### Validity
 
 This run exercised Flocci's **fallback keyword matcher**, not its AI Stack Builder, by the page's own statement. It is valid evidence of what a user receives when the assistant is unavailable. It is **not** a test of the AI builder's constraint handling. S2 must be rerun when the assistant is available before the AI builder's P1/P2 are graded. The run also preceded public visibility of Protocol v1. The S2 text used was the locally pinned version, and nothing was changed after the result was seen.
+
+## Run F-S2-2: S2 (contradictory), AI mode
+
+- **When and how:** 2026-10-16, captured by about 20:09 UTC. Same tester, browser and free tier as F-S2-1. The tester confirmed the exact S2 prompt by pasting it with the result. Transcribed from a screenshot kept outside the repository, SHA-256 `f89510e20c5a02fff654ad152b93ad9b535fb4507002e4b42d97b8a9471bc3f6`.
+- **Capture limits:** the screenshot shows six result cards only. The page header (and so whether the "assistant unavailable" banner was absent), any stack-level summary and anything below the cards are not in the capture. The tailored "WHY" text on every card indicates the AI path, not the keyword fallback; this is an inference.
+- **Visible output:** six cards, each with a category, tags, a request-specific "WHY" and generic feature bullets. All are badged FREE.
+
+| Tool | Category | "WHY" text (verbatim) |
+| --- | --- | --- |
+| llama.cpp | Local LLM Runners | "CPU-only inference engine with GGUF quantisation and an OpenAI-compatible llama-server, so the whole stack can run offline on one Windows laptop." |
+| Ollama | Local LLM Runners | "Simplest way to pull and run a small quantised model locally on CPU; friendlier than raw llama.cpp for a non-specialist team." |
+| Open WebUI | Local LLM Runners | "Self-hosted ChatGPT-style interface that talks to Ollama or any OpenAI-compatible endpoint, giving your ~20 users a shared UI with accounts and chat history." |
+| Phi (Microsoft) | Notable Open Models | "MIT-licensed small model (Phi-4-mini class) that runs acceptably on 16 GB CPU RAM and is the realistic quality/latency compromise for offline summarisation." |
+| Gemma (Google) | Notable Open Models | "Google's lightweight open Gemma models fit in modest RAM and are a good alternative if Phi's output style suits your reviews less well." |
+| Mistral Open Models (Magistral, Devstral, Voxtral) | Notable Open Models | "Mistral Small open weights are a step-up quality option if you can accept a smaller context and slower per-request latency." |
+
+- **Controls per card:** "Visit ↗", bookmark and compare icons, not exercised in this capture. No configuration file, export or share control is visible in the captured area, although the prompt asked for "a configuration we can save or share".
+
+### Observations against the S2 checklist
+
+- C1 (offline, one 16 GB CPU laptop) is respected and stated explicitly ("the whole stack can run offline on one Windows laptop").
+- C5 (zero cost) is respected: all picks are free and open.
+- C3 (20 concurrent users) is accepted as feasible ("giving your ~20 users a shared UI"), with no warning that one CPU-only laptop cannot serve 20 concurrent requests at the stated context and latency.
+- C2 (128k context) and C4 (under 2 s) are acknowledged only indirectly. "Realistic quality/latency compromise" (Phi) and "if you can accept a smaller context and slower per-request latency" (Mistral) imply relaxation, but neither names the 128k or 2 s targets as unachievable, nor says which constraint must change.
+- The infeasibility of meeting C2–C4 together on C1 hardware is analyst judgement from general CPU-inference constraints, not a measurement in this study.
+
+## Attempt F-S1-1: S1-short, blocked
+
+- **When:** 2026-10-16, about 20:21 UTC, same tester and browser, after F-S2-1 and F-S2-2.
+- **First try:** the full S1 text was rejected with "Ask in 2–400 characters", so the S1-short adaptation was prepared. No answer was produced.
+- **Retry:** with S1-short, the tester reported "I can't access it anymore". The exact on-screen message was not captured. The tester had been browsing through a VPN. Believing the failure was a connection problem, they switched to a different VPN endpoint to troubleshoot, not to obtain extra allowance. It was still blocked and produced no output. Recorded for transparency. The F-S2 runs may also have been made through a VPN, so the apparent access region is not known. The run is recorded as `unknown (access)`, to retry on a later day from the tester's normal connection.
+- **Observation:** on the anonymous free tier, the tester obtained two answers (one fallback, one AI) before losing access in the same session. This is a single observation, not a documented allowance.
