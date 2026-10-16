@@ -1,31 +1,162 @@
 # MR-03: Test direct stack-builder substitutes
 
-Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66). Assignees: @tynamite, @itisSomeone; coordinator @CompleteDotTech. Status: common scenario run on two device-first substitutes (2026-10-17); Flocci contradictory-constraints test blocked by sign-in. Readiness: Needs input (a signed-in Flocci session).
+Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; S1/S2 runs pending · Access date: 2026-10-16
 
-## Question
+Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
+
+## User decision and falsifiable question
+
 Do Flocci and other guided builders already satisfy the proposed MVP?
 
-## Starting evidence
-[competitors.json](competitors.json). This note is not a new canonical component catalog or a completed measurement.
+The proposed MVP in [mvp-analysis.md](mvp-analysis.md) is a hybrid bounded workflow. It explains one local-versus-API inference decision for a narrow workload, with explicit constraints, uncertainty, dated costs and a shareable versioned decision record. This test is falsifiable. If a substitute satisfies the pinned scenario below, the MVP premise is weakened for that scenario, and #57/#58 must narrow, partner or pivot. A failure only establishes the specific observed gap, not general superiority.
 
-## Protocol and acceptance
-- [x] Run a common public non-sensitive scenario (Flocci 2026-10-16; ModelFit and CanIRun.ai 2026-10-17)
-- [ ] Check constraint handling and explanation quality (Flocci contradictory-constraints test blocked by sign-in)
-- [x] Inspect saved or exported configuration claims (ModelFit, CanIRun.ai; Flocci export still unverified)
-- [ ] Record counterexamples and pivot recommendation (interim recommendation below; Flocci result pending)
-- [x] Record exact source/version, conditions, failures and confidence.
-- [ ] Obtain affected-owner review and accepted handoff.
+## Scope and canonical related work
 
-## Next action
-Run the contradictory-constraints scenario on Flocci Stack Builder from a signed-in session with available credits (see 2026-10-17 results). Then check whether Flocci's output can be saved or exported.
+- Native downstream: #57 (MR-10) and #58 (MR-11) cannot be accepted before this issue reports.
+- Information consumers: #2 (workload), #40 (contract/compatibility semantics) and #42 (build summary/share). These are handoffs for review, not ownership transfers.
+- Starting evidence: [competitors.json](competitors.json), the [Flocci](competitors/flocci.md), [ModelFit](competitors/modelfit.md) and [llmfit](competitors/llmfit.md) profiles, and [browser observations](evidence/browser-observations.md). This note is not a canonical component catalog. Feature-matrix grade changes are proposed to the #49 owner, not edited here.
+- Out of scope: paid credits or accounts, private data, deploying or running a generated stack, and any access-limit circumvention.
 
-## Result
-One generated workflow was observed, as described below; no deployed-system validation is claimed. No raw customer data, benchmark artifact or paid API output was collected. Consumers: #2, #40, #42.
+## Protocol v1 (pinned 2026-10-16, before S1/S2 runs)
 
-## Initial result
-A completed free Stack Builder test returned an ordered local PDF RAG workflow for Windows, 16 GB RAM and no GPU. It acknowledged memory/latency uncertainty and suggested reproducibility steps. The visible result named Docling, txtai, Chroma, Ollama, Gemma and Open WebUI. This verifies generated workflow advice, not that the combination runs, preserves privacy or produces an executable export.
+The scenarios, graded properties and tool selection below were fixed before any S1/S2 result was seen. The pin is effective once this revision is visible on GitHub for review; runs start only after that. They must not be changed after a competitor result is observed. A later revision requires a new protocol version that keeps v1's results.
 
-Remaining: test contradictory constraints, verify actual deployment and export behavior, and obtain owner review. Second-substitute comparisons were run on 2026-10-17 (below).
+### Scenarios
+
+- **S0 (recorded, historical).** Flocci Stack Builder: local PDF RAG workflow for Windows, 16 GB RAM, no GPU. See the initial result below. It is retained as context and is not regraded against P1–P5, because its prompt predates this protocol.
+- **S1, common, public and non-sensitive (MVP decision).** Exact prompt text:
+
+  > A 5-person team wants an assistant that summarises about 200 short public product reviews and forum posts per day. Hardware: one Windows laptop, 16 GB RAM, no discrete GPU. About 4,000 tokens per request, up to 3 concurrent users during working hours, budget at most USD 50 per month, open-weight models preferred, answer latency at most 10 seconds. Should we run locally or use a hosted API? List the components, explain why, state what is uncertain, and give a configuration we can save or share.
+
+- **S2, contradictory constraints.** Exact prompt text:
+
+  > A company wants an assistant that summarises public product reviews and forum posts. It must run fully offline on one Windows laptop with 16 GB RAM and no discrete GPU, serve 20 concurrent users, accept a 128,000-token context per request, answer in under 2 seconds, and cost nothing. Recommend a stack, explain your reasoning, and give a configuration we can save or share.
+
+  S2 is self-contained, so it can run before S1 in a fresh session. Expected good behaviour is to identify that the constraints cannot all be met together, explain why, and propose which constraint to relax. Silently dropping a constraint is a failure of P1.
+
+Where a tool's interface cannot take free text, enter the closest structured equivalent and record every field value and unavoidable difference. A constraint the interface cannot express (for example budget or latency in a hardware-fit form) is graded `out of scope` for P1, listed by name, and never counted as respected.
+
+### Graded properties
+
+Each property is graded per tool and scenario as `supported`, `partial`, `failed`, `unknown` or `out of scope`, with a pointer to the captured evidence.
+
+| ID | Property | Acceptance criterion served |
+| --- | --- | --- |
+| P1 | Every stated constraint is respected or explicitly flagged as unmet | Constraint handling |
+| P2 | Reasons and uncertainty are explained, not only a list of names | Explanation quality |
+| P3 | Local and hosted-API options are compared, with costs carrying a date, unit or source | MVP decision coverage |
+| P4 | A saved, shared or exported artifact exists and retains inputs and assumptions | Saved/exported configuration claims |
+| P5 | That artifact is reusable: reproducible, versioned or machine-readable rather than prose only | Saved/exported configuration claims |
+
+P1 is graded against a fixed constraint checklist, so the grade does not depend on the analyst's overall impression. `supported` means every applicable constraint is respected or explicitly flagged. `partial` means at least one is silently ignored. `failed` means a recommendation violates a constraint without saying so.
+
+| ID | S1 constraint | S2 constraint |
+| --- | --- | --- |
+| C1 | One Windows laptop, 16 GB RAM, no discrete GPU | Same hardware, fully offline |
+| C2 | About 4,000 tokens per request | 128,000-token context per request |
+| C3 | Up to 3 concurrent users | 20 concurrent users |
+| C4 | Answer latency at most 10 s | Answer latency under 2 s |
+| C5 | Budget at most USD 50 per month | Zero cost |
+| C6 | Open-weight models preferred | (not stated) |
+| C7 | Local-versus-hosted-API decision requested | (not stated) |
+
+For S2, the expected behaviour is to flag that C1–C5 conflict, especially offline single-laptop hardware against C2–C4. Recommending a stack as if all were met is `failed`.
+
+`unknown` covers an inaccessible feature, an exhausted free allowance or an unreachable page. An unreachable site is not a failed capability. `out of scope` covers a property outside a narrower tool's declared purpose. A narrower tool is not a failed full-stack builder. No numeric pass threshold is set here; the coordinator sets product thresholds per [mvp-analysis.md](mvp-analysis.md).
+
+Mapping to contract outcome vocabulary, for #40 review: `supported` → `pass`, `failed` → `fail`, `unknown` → `unknown`, `out of scope` → `skipped`. `partial` has no contract equivalent; it is a research grade only and is reported with the specific constraint or property that was missed. No compatibility rule or severity is derived from these grades.
+
+### Tools
+
+| Tool | Role | Scenarios | Reason |
+| --- | --- | --- | --- |
+| Flocci Stack Builder (<https://aitools.flocci.in/stack>) | First substitute | S2, then S1 | Classified a direct competitor; one free run is already recorded (S0) |
+| ModelFit (<https://modelfit.io/>) | Second substitute | S1 | Classified a direct competitor; [synthesis.md](synthesis.md) names Flocci and ModelFit as the direct entry-workflow substitutes; web device → setup → results flow allows P4/P5 inspection; its engine was already pinned in [technical-feasibility.md](technical-feasibility.md). Its documented step 1 device list (Mac models, iPhone, NVIDIA GPU, AMD) shows no CPU-only Windows laptop entry, so the closest available entry and the mismatch are recorded under C1 |
+| llmfit (<https://www.llmfit.org/>) | Optional | S1, P4/P5 only | Partial competitor (CLI/TUI); documented JSON/REST output is relevant only to the export question. It auto-detects the host and documents only a GPU-memory override (`--memory`), not a RAM override, so a run reflects the tester's real machine, which must be recorded |
+
+The issue named "ModelFit or llmfit". ModelFit is selected for the comparability reasons above. ModelFit has no hosted-API side, so P3 is graded `out of scope` for it, not `failed`.
+
+### Capture rules per run
+
+Record the date and UTC time, URL, access tier and remaining free allowance shown, browser, the exact prompt or field values, and the full visible output as text. Also record every save/share/export control and what it actually produced, plus anything inaccessible. Screenshots stay outside the repository; reference them through an [evidence manifest](../../evidence/README.md) if they are needed. Use no fresh profiles or other workaround when a free allowance is exhausted: record the run as `unknown (allowance)` and retry on a later day. Repeat a run when the allowance permits, because generated output can vary; report every repeat, including disagreements between repeats. Grades are assigned from the captured text only, never from memory of the session, so a reviewer can re-grade each run from the same capture.
+
+## Candidate comparison
+
+Results are pending. Cells are filled only from captured runs.
+
+| Tool · scenario | P1 | P2 | P3 | P4 | P5 | Run date | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Flocci · S2 | pending | pending | pending | pending | pending | | |
+| Flocci · S1 | pending | pending | pending | pending | pending | | |
+| ModelFit · S1 | pending | pending | out of scope | pending | pending | | |
+| llmfit · S1 (optional) | out of scope | out of scope | out of scope | pending | pending | | |
+
+## Documented capabilities before the runs (desk evidence)
+
+Collected 2026-10-16 from public pages before any S1/S2 run, to set expectations for P3–P5. These are documented or absent claims, not observations. They do not fill grade cells. Missing documentation is not proof that a feature is absent.
+
+| Tool | Inputs documented | Hosted API / cost coverage | Save / share / export documented | Implication for the runs |
+| --- | --- | --- | --- | --- |
+| Flocci Stack Builder | "Describe what you want to accomplish" (free text; UI is client-rendered) | Not documented; free tools only | None found in the static page | P4/P5 must be checked hands-on; free allowance undocumented |
+| ModelFit | Device step (Mac models, iPhone, NVIDIA GPU, AMD), then setup, then results; search accepts "16GB" | Documented as 100% local, "no API keys"; affiliate and cloud-GPU commissions disclosed | No per-result share or permalink found. The dataset is offered as JSON (`/api/dataset/`, CC BY 4.0, updated 2026-10-13), and a CLI (`npx @wecko-ai/modelfit`) prints an Ollama command | P3 out of scope by design; P5 may be met only at dataset/CLI level, not for a user's result |
+| llmfit | Auto-detected hardware; `--max-context`, `--use-case`, GPU-only `--memory` override | Local runtimes only (Ollama, llama.cpp, MLX, Docker Model Runner, LM Studio) | `recommend --json`, `fit --json`, REST `serve` endpoints, web dashboard | Strongest documented machine-readable output, but narrow scope |
+
+## Evidence
+
+| Claim | URL / publisher | Access date | Version / region | Grade | Confidence | Limitation / rights |
+| --- | --- | --- | --- | --- | --- | --- |
+| Flocci Stack Builder takes a free-text goal; no save/share/export or allowance documented in the static page | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Page metadata generated 2026-10-16 | Primary documentation | Low (client-rendered) | Absence in static text is not absence in the app |
+| ModelFit is local-only, has device → setup → results steps, and offers a dataset JSON API and CLI but no documented result permalink | <https://modelfit.io/> and <https://modelfit.io/data/> · ModelFit | 2026-10-16 | Dataset updated 2026-10-13 | Primary documentation | Medium | Steps 2–3 not visible in static text; dataset CC BY 4.0 with attribution |
+| llmfit documents JSON output, REST endpoints and local-runtime-only coverage | <https://www.llmfit.org/> · llmfit | 2026-10-16 | No version stated | Primary documentation | Medium | Seed-site operator unconfirmed (see profile); not installed or run |
+| S0: Flocci returned an ordered six-step local PDF RAG workflow with caveats | <https://aitools.flocci.in/stack> · Flocci Technologies | 2026-10-16 | Free tier, anonymous | Observed behaviour | Medium for the observed response | Generated advice only; no runtime, privacy or export verified |
+
+## Findings, counterevidence and unknowns
+
+### Initial result (S0)
+
+A completed free Stack Builder test returned an ordered local PDF RAG workflow for Windows, 16 GB RAM and no GPU. It acknowledged memory/latency uncertainty and suggested reproducibility steps. The visible result named Docling, txtai, Chroma, Ollama, Gemma and Open WebUI. This verifies generated workflow advice, not that the combination runs, preserves privacy or produces an executable export. The six visible component steps named no evaluation tool, and txtai and Chroma were both suggested without a stated joint or alternative storage role.
+
+No raw customer data, benchmark artifact or paid API output was collected.
+
+Open unknowns before S1/S2:
+- whether Flocci offers any save, share or export function in the rendered app;
+- whether ModelFit's results step offers a per-result share or export, and how its device list handles a CPU-only Windows laptop;
+- how many free Flocci requests are available per day;
+- whether either tool detects contradictory constraints.
+
+## Method and reproducibility
+
+This is a structured expert evaluation, not a user study. It shows what each tool does with a fixed task. It does not measure user preference, completion rates or demand; those belong to #63/#52. Following competitive-benchmarking practice ([MeasuringU](https://measuringu.com/competitive-benchmarking/), accessed 2026-10-16), every tool gets the same task at equal difficulty, with closed success criteria fixed in advance, and the protocol is versioned so it can be repeated later as the tools change.
+
+Anonymous public browsing on free tiers, following Protocol v1. Any reader can repeat each run with the exact prompts above. Generated answers are nondeterministic, so a repeat may differ. Differences between repeats are recorded, not averaged away.
+
+## Recommendation and assumptions
+
+Pending S1/S2 results. The recommendation will be keep, narrow or pivot for the scenario tested, with every conclusion linked to a captured run or labelled a hypothesis. It will not be generalised to all markets.
+
+## Acceptance criteria and validation results
+
+| Criterion | Artifact / evidence | State |
+| --- | --- | --- |
+| Run a common public non-sensitive scenario | S1 on Flocci and ModelFit | Protocol pinned; not run |
+| Check constraint handling and explanation quality | P1/P2, S2 on Flocci | Not run |
+| Inspect saved or exported configuration claims | P4/P5 on each tool | Not run |
+| Record counterexamples and pivot recommendation | Findings and recommendation sections | Pending results |
+| Deliverable links every significant conclusion to evidence or an explicit hypothesis | Evidence table and run captures | Pending results |
+| Relevant technical owners review handoffs; unresolved decisions are named | #2, #40, #42 owners | Not requested |
+| Repository checks pass; reviewer accepts the evidence before Done | Validation commands in the PR | Checks run per revision; acceptance pending |
+
+## Handoffs and required owner decisions
+
+- Coordinator: confirm Protocol v1 (scenarios, properties, ModelFit as second substitute) and any product pass threshold.
+- #2: whether S1 is a representative workload definition.
+- #40: whether `unknown`/`out of scope` grading matches contract outcome semantics (`pass`, `fail`, `unknown`, `skipped`).
+- #42: what the observed save/share artifacts imply for the build-summary and share requirements.
+- #49 owner: proposed feature-matrix updates for Flocci and ModelFit (`export`, `context`, `api_pricing`), once results exist.
+
+## Phase limit and next action
+
+Next action: run S2 then S1 on Flocci Stack Builder, then S1 on ModelFit, under Protocol v1. Use `Refs #66` until every criterion and handoff is accepted.
 
 ## CanIRun.ai candidate (2026-10-16)
 
