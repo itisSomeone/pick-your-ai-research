@@ -2,7 +2,7 @@
 
 Issue: [#66](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/66) · Workstream: MR-03 · Parent: [#50](https://github.com/Pick-Your-AI/pick-your-ai-research/issues/50) · Status: protocol pinned; ModelFit S1 run (CLI); Flocci S2 run in fallback and AI mode; Flocci S1 blocked by free-tier access; recommendation issued for review · Access date: 2026-10-16
 
-Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Ready.
+Contributor: @itisSomeone (started with program-lead permission, 2026-10-16). The live GitHub assignee list remains authoritative; this note assigns no one. Live assignees at the 2026-10-17 readback (PR #125): @tynamite, @itisSomeone; coordinator @CompleteDotTech. Readiness: Needs input (a signed-in Flocci session), as set by PR #125.
 
 ## User decision and falsifiable question
 
