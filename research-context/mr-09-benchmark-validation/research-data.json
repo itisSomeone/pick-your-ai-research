@@ -1,0 +1,409 @@
+{
+  "schema": "mr09-research-package/1",
+  "title": "Benchmark comparability and harness effects: research package for issue #62",
+  "prepared": "2026-10-17",
+  "prepared_for": [
+    "CompleteDotTech",
+    "PUSHINGSQUARES",
+    "appletechie"
+  ],
+  "status": "Background research findings, not instructions and not evidence for acceptance. The record is research/market/benchmark-validation.md on PR #83.",
+  "context": {
+    "repository": "Pick-Your-AI/pick-your-ai-research",
+    "issue": 62,
+    "parent_issue": 56,
+    "pull_request": 83,
+    "pr_base_branch": "research/market-intelligence",
+    "pr_head": "itisSomeone:research/mr-09-benchmark-validation",
+    "question": "Which benchmark differences survive controlled model-harness comparisons?",
+    "constraints": [
+      "No paid runs in the initial pass",
+      "No bulk downloads",
+      "No v1 contract change outside #40",
+      "Refs, not Closes"
+    ]
+  },
+  "evidence_grades": [
+    "Primary documentation",
+    "Vendor claim",
+    "Independent measurement",
+    "Estimate"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Harness-Bench paper v2",
+      "url": "https://arxiv.org/html/2605.27922v2",
+      "publisher": "Harness-Bench authors (arXiv)",
+      "version": "v2, revision 2026-10-15",
+      "accessed": "2026-10-17 (re-read by CompleteDotTech on PR #83)",
+      "grade": "Primary documentation (metadata); Vendor claim (results)",
+      "license": "CC BY 4.0 (paper)",
+      "limitations": "Landing metadata says 106 tasks / 5,194 trajectories; full text says 300 tasks / 20,454 combinations."
+    },
+    {
+      "id": "S2",
+      "title": "Harness Bench website and leaderboard",
+      "url": "https://www.harness-bench.ai/",
+      "publisher": "Harness Bench Team",
+      "version": "Unversioned 'Diagnostic Benchmark 2026'",
+      "accessed": "2026-10-16",
+      "grade": "Vendor claim",
+      "license": "All rights reserved",
+      "limitations": "No run dates, snapshots or variance; per-model matrix did not render."
+    },
+    {
+      "id": "S3",
+      "title": "Harness-Bench repository",
+      "url": "https://github.com/Qihoo360/harness-bench/tree/b8d89634c6f445fcc68ceb6744a59bef6cdf4863",
+      "publisher": "Qihoo360",
+      "version": "commit b8d89634c6f445fcc68ceb6744a59bef6cdf4863 (2026-10-09)",
+      "accessed": "2026-10-16",
+      "grade": "Primary documentation",
+      "license": "No LICENSE file",
+      "limitations": "Read-only inspection; nothing executed; results not in Git."
+    },
+    {
+      "id": "S4",
+      "title": "Adding error bars to evals",
+      "url": "https://arxiv.org/abs/2411.00640v1",
+      "publisher": "Miller (Anthropic)",
+      "version": "v1",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement",
+      "limitations": "Measured on other benchmarks."
+    },
+    {
+      "id": "S5",
+      "title": "Repeated SWE-bench Verified trials",
+      "url": "https://arxiv.org/abs/2602.07150v1",
+      "publisher": "Bjarnason et al.",
+      "version": "v1",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement",
+      "limitations": "SWE-bench Verified, not Harness Bench."
+    },
+    {
+      "id": "S6",
+      "title": "Benchmark subsampling ranking stability",
+      "url": "https://arxiv.org/abs/2406.10229",
+      "publisher": "Madaan et al.",
+      "version": "abstract page only",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement",
+      "limitations": "Abstract only."
+    },
+    {
+      "id": "S7",
+      "title": "Terminal-Bench 2.0",
+      "url": "https://arxiv.org/pdf/2601.11868",
+      "publisher": "Terminal-Bench authors",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S8",
+      "title": "Holistic Agent Leaderboard (HAL)",
+      "url": "https://arxiv.org/abs/2510.11977v1",
+      "publisher": "HAL authors",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S9",
+      "title": "AI Agents That Matter",
+      "url": "https://arxiv.org/abs/2407.01502v1",
+      "publisher": "Kapoor et al.",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S10",
+      "title": "FormatSpread",
+      "url": "https://arxiv.org/abs/2310.11324v1",
+      "publisher": "Sclar et al.",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S11",
+      "title": "GSM1k",
+      "url": "https://arxiv.org/html/2405.00332v1",
+      "publisher": "Zhang et al.",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S12",
+      "title": "Agentic Benchmark Checklist",
+      "url": "https://arxiv.org/html/2507.02825v5",
+      "publisher": "ABC authors",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    },
+    {
+      "id": "S13",
+      "title": "tinyBenchmarks",
+      "url": "https://export.arxiv.org/abs/2402.14992",
+      "publisher": "Polo et al.",
+      "accessed": "2026-10-16",
+      "grade": "Independent measurement"
+    }
+  ],
+  "approaches": [
+    {
+      "id": "A1",
+      "name": "Desk comparability audit",
+      "settles": "Whether two published numbers can be compared at all",
+      "cannot_settle": "Whether an effect is real",
+      "cost": "No compute",
+      "value": "High",
+      "sources": [],
+      "status_in_project": "Done (PR #83)"
+    },
+    {
+      "id": "A2",
+      "name": "Paired statistics and power analysis",
+      "settles": "Whether a gap exceeds noise",
+      "cost": "Arithmetic; needs per-task results",
+      "value": "Very high",
+      "key_fact": "Clustered SEs up to 3.05x naive; ~969 items to detect a 3-point gap at 80% power",
+      "sources": [
+        "S4"
+      ]
+    },
+    {
+      "id": "A3",
+      "name": "Repeated trials and pass^k",
+      "settles": "Run-to-run stability",
+      "cost": "3 to 5 runs per pair",
+      "value": "High",
+      "key_fact": "Single runs shift 2.2 to 6.0 points; SD above 1.5 even at temperature 0",
+      "sources": [
+        "S5"
+      ]
+    },
+    {
+      "id": "A4",
+      "name": "Metric separation and cost frontiers",
+      "settles": "Whether the mean hides incomplete delivery or cost",
+      "cost": "Free if per-task scores and costs are logged",
+      "value": "High",
+      "key_fact": "$134.50 vs $2.51 for similar HumanEval accuracy",
+      "sources": [
+        "S9"
+      ]
+    },
+    {
+      "id": "A5",
+      "name": "Fixed reference scaffold",
+      "settles": "Fair model ranking; hides harness effects",
+      "cost": "Medium",
+      "value": "High",
+      "sources": []
+    },
+    {
+      "id": "A6",
+      "name": "Controlled model x harness grid",
+      "settles": "Real harness effects per model",
+      "cost": "Thousands of dollars",
+      "value": "High",
+      "key_fact": "Terminal-Bench 2.0: 6 agents x 16 models, at least 5 runs; HAL: about $40,000 for 21,730 rollouts",
+      "sources": [
+        "S7",
+        "S8"
+      ]
+    },
+    {
+      "id": "A7",
+      "name": "Sensitivity analysis (prompt, format, grader)",
+      "settles": "Fragility of close calls",
+      "cost": "Under $10 per task per model",
+      "value": "Medium-high",
+      "key_fact": "Up to 76-point spread from formatting",
+      "sources": [
+        "S10"
+      ]
+    },
+    {
+      "id": "A8",
+      "name": "Contamination detection and fresh private tasks",
+      "settles": "Whether results hold on unseen tasks",
+      "cost": "Low to high",
+      "value": "High",
+      "key_fact": "GSM1k drops up to 13%; no method proves absence",
+      "sources": [
+        "S11"
+      ]
+    },
+    {
+      "id": "A9",
+      "name": "Benchmark quality audit",
+      "settles": "Whether tasks and graders are valid",
+      "cost": "Manual review",
+      "value": "Very high",
+      "key_fact": "7 of 10 audited agent benchmarks had task-validity flaws",
+      "sources": [
+        "S12"
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "Efficient subsampling",
+      "settles": "Cheap screening only",
+      "cost": "About 100 items",
+      "value": "Medium",
+      "key_fact": "Under 2% error on means, but about 12% of pairwise rankings can flip",
+      "sources": [
+        "S13",
+        "S6"
+      ]
+    }
+  ],
+  "harness_bench_facts": [
+    {
+      "id": "F1",
+      "fact": "79 of 274 general tasks declare semantic_judge with score_role bounded_case_fallback and default_model agent; max_fallback_weight 0.06 to 0.25, median 0.10",
+      "implication": "An LLM judge (by default the evaluated model) can set part of the score, contradicting 'No LLM judge in scoring'; across models the grader differs",
+      "source": "S3",
+      "url": "https://github.com/Qihoo360/harness-bench/blob/b8d89634c6f445fcc68ceb6744a59bef6cdf4863/src/harnessbench/grading/semantic_judge.py",
+      "confidence": "High"
+    },
+    {
+      "id": "F2",
+      "fact": "Per-task timeout_sec: 185 tasks at 7200 s, 44 at 3600, 17 at 2400, 28 at 1800; a runner --timeout overrides all",
+      "implication": "Budget is per task, not a single deadline",
+      "source": "S3",
+      "confidence": "High"
+    },
+    {
+      "id": "F3",
+      "fact": "Runner defaults: temperature 1.0, thinking high, max-tokens 32768, context-window 200000, max-agent-turns 150, workers 4",
+      "implication": "Tooling defaults; S1 Appendix B.1 states published-run settings (temperature 1.0, model-specific max output, 200K context, 150 turns)",
+      "source": "S3",
+      "confidence": "High"
+    },
+    {
+      "id": "F4",
+      "fact": "Task provenance: 212 public workflow adaptations, 42 handcrafted synthetic, 20 adapted synthetic",
+      "source": "S3",
+      "url": "https://github.com/Qihoo360/harness-bench/blob/b8d89634c6f445fcc68ceb6744a59bef6cdf4863/catalog/task_catalog.csv",
+      "confidence": "High"
+    },
+    {
+      "id": "F5",
+      "fact": "Every general task package ships tests/ with cases.yaml, ground_truth, reference and test_outcome.py publicly",
+      "implication": "Contamination risk for models trained after publication; exposure start date unknown",
+      "source": "S3",
+      "confidence": "High"
+    },
+    {
+      "id": "F6",
+      "fact": "Content lock standard274.release-v1: task_ids_sha256 8cb63ccd4df67b2c9c829b6e598296635013f1a31c5c9ff05e768508b9fed4e7; task_set_manifest_sha256 3a667df15143fa223659f05c137eff6df0d2e1cbbbf571390d6425eaece2b956",
+      "implication": "Identifies the task set even if commit links break",
+      "source": "S3",
+      "confidence": "High"
+    },
+    {
+      "id": "F7",
+      "fact": "Public history is one commit dated 2026-10-09; 237- and 254-task locks exist but their contents are not in public history",
+      "implication": "v1 (106 tasks) contents cannot be hashed; overlap unknown",
+      "source": "S3",
+      "confidence": "High"
+    },
+    {
+      "id": "F8",
+      "fact": "Task IDs are kept when task content is redesigned",
+      "implication": "ID matching does not prove content matching",
+      "source": "S3",
+      "url": "https://github.com/Qihoo360/harness-bench/blob/b8d89634c6f445fcc68ceb6744a59bef6cdf4863/docs/STANDARD274.md",
+      "confidence": "High"
+    },
+    {
+      "id": "F9",
+      "fact": "20,454 = 274 x 7 x 10 + 26 x 7 x 7, one run per configuration",
+      "implication": "k = 1; run variance cannot be separated from task sampling",
+      "source": "S1, S2",
+      "confidence": "High"
+    },
+    {
+      "id": "F10",
+      "fact": "Harness images pinned: Claude Code 2.1.220, Codex 0.145.0, Nanobot 0.3.0, OpenCode 1.18.8, Goose 1.44.0, OpenClaw 2026.5.26-slim, Hermes v2026.7.20",
+      "source": "S3",
+      "confidence": "High"
+    }
+  ],
+  "published_claims": [
+    {
+      "claim": "Qwen3.8-27B harness gap 39.2 points",
+      "metric": "General-task mean-score range (S1 Table 2)",
+      "grade": "Vendor claim",
+      "verdict": "Not established: fails G1, G3 unknown"
+    },
+    {
+      "claim": "GLM-5.3 variants 13.5-point full-credit range",
+      "metric": "S1 Table 9",
+      "grade": "Vendor claim",
+      "verdict": "Not established: fails G1, G3 unknown"
+    },
+    {
+      "claim": "Gaps of 5.0 to 9.5 points within nine models",
+      "metric": "General-task mean-score range (S1 Table 2)",
+      "grade": "Vendor claim",
+      "verdict": "Not established"
+    },
+    {
+      "claim": "Per-model harness selection adds 2.53 to 2.73 held-out full-credit points; mean within +/-0.14",
+      "metric": "S1 Table 10",
+      "grade": "Vendor claim",
+      "verdict": "Not established"
+    },
+    {
+      "claim": "GPT-5.6 Sol: Nanobot 2.97x OpenClaw cost at 24.82% vs 31.02% full credit",
+      "grade": "Vendor claim",
+      "verdict": "Full-credit gap not established; cost ratio separate"
+    },
+    {
+      "claim": "Mean-score and full-credit harness orders differ in pooled profile",
+      "grade": "Vendor claim",
+      "verdict": "Hypothesis, not established"
+    }
+  ],
+  "gates": {
+    "G1": "Pinned task lock, model snapshot, harness version, budget, settings, grader",
+    "G2": "Exactly one factor differs",
+    "G3": "Gap / valid paired SE >= 1.96; missing result-level evidence = unknown",
+    "G4": "Same direction on mean and full credit, or divergence is the claim"
+  },
+  "open_questions": [
+    {
+      "to": "Harness Bench authors",
+      "q": "Which code revision, grader (with or without semantic_judge) and model snapshots produced S1 Tables 2, 9 and 10?"
+    },
+    {
+      "to": "Harness Bench authors",
+      "q": "Can per-task results be published so paired and clustered errors can be computed?"
+    },
+    {
+      "to": "Harness Bench authors",
+      "q": "Is the v1 106-task list available with content hashes?"
+    },
+    {
+      "to": "Harness Bench authors",
+      "q": "Under what license may tasks and results be reused?"
+    },
+    {
+      "to": "#36 owners",
+      "q": "Is a paid replication wanted, with what margins (delta, delta_m), and where do results live?"
+    },
+    {
+      "to": "#41 / #60",
+      "q": "May Harness Bench tasks or results be reused or displayed?"
+    }
+  ],
+  "validation_sequence_considered": [
+    "A1 desk audit (done)",
+    "Small paired replication: one model, two harnesses, k>=3, judge fixed (A2+A3+A4)",
+    "Controlled grid (A6) only if #36 wants harness rankings"
+  ]
+}
